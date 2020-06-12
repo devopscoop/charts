@@ -1,4 +1,4 @@
-image: registry.gitlab.com/dedevsecops/workstation:707e3765
+image: registry.gitlab.com/dedevsecops/workstation:aws
 
 deploy:
   script:
