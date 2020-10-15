@@ -3,10 +3,10 @@ image: registry.gitlab.com/dedevsecops/workstation:aws
 deploy:
   script:
     - >
-      helm3 repo add dedevsecops --username "$CHARTMUSEUM_USR" --password "$CHARTMUSEUM_PSW" https://charts.dedevsecops.com
+      helm repo add dedevsecops --username "$CHARTMUSEUM_USR" --password "$CHARTMUSEUM_PSW" https://charts.dedevsecops.com
       for chart in dedevsecops/*; do
         if helm lint "${chart}"; then
           # Never fail...
-          helm3 push "${chart}" dedevsecops || true
+          helm push "${chart}" dedevsecops || true
         fi 
       done
