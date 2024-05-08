@@ -1,3 +1,6 @@
+# Maybe we should aspire to use this pipeline?
+# https://gitlab.com/gitlab-org/charts/gitlab-runner/-/blob/main/.gitlab-ci.yml?ref_type=heads
+
 image: registry.gitlab.com/dedevsecops/workstation:aws
 
 deploy:
