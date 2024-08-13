@@ -4,6 +4,12 @@
 
 replicaCount: 1
 
+# Example initContainer
+#initContainers:
+#  - name: copy-keyfiles
+#    image: "amazon/aws-cli:2.17.29"
+#    command: ['sh', '-c', "aws s3 cp --recursive s3://keyfiles-nebrazkp-us-east-2/upa-v1.2-sepolia ."]
+
 image:
   repository: nginx
   pullPolicy: IfNotPresent
@@ -125,7 +131,3 @@ affinity: {}
 #  ADMIN_TOKEN: kjhfkjgahsdug
 #  PASSWORD: kfj09u039jh
 #  AWS_ACCESS_SECRETS_AND_SUCH: asjkldnkasghd9
-
-
-
-
