@@ -34,12 +34,11 @@ spec:
         - name: {{ .Chart.Name }}
           env:
             {{- toYaml .Values.env | nindent 12 }}
-            {{- $relname := .Release.Name -}}
             {{- range $key, $value := .Values.secrets }}
             - name: {{ $key }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ $relname }}
+                  name: {{ template "app.fullname" . }}
                   key: {{ $key }}
             {{- end }}
           securityContext:
