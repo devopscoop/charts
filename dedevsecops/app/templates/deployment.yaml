@@ -38,7 +38,7 @@ spec:
             - name: {{ $key }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "app.fullname" . }}
+                  name: {{ template "app.fullname" $ }}
                   key: {{ $key }}
             {{- end }}
           securityContext:
