@@ -131,3 +131,8 @@ affinity: {}
 #  ADMIN_TOKEN: kjhfkjgahsdug
 #  PASSWORD: kfj09u039jh
 #  AWS_ACCESS_SECRETS_AND_SUCH: asjkldnkasghd9
+
+#command:
+#  - /bin/sh
+#  - -c
+#  - node /app/main.js --option1 thing
