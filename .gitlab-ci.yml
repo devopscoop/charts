@@ -25,4 +25,9 @@ helm:
     - export helm_username="$CI_REGISTRY_USER"
     - export helm_password="$CI_REGISTRY_PASSWORD"
     - export git_repo_owner="$CI_PROJECT_NAMESPACE"
-    - if [ -n "$CI_MERGE_REQUEST_ID" ]; then ./pipeline.sh; else ./pipeline.sh push; fi
+    - |
+      if [ -n "$CI_MERGE_REQUEST_ID" ]; then
+        ./pipeline.sh push-rc
+      else
+        ./pipeline.sh push
+      fi

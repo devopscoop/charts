@@ -32,5 +32,5 @@ steps:
         if [[ "${CI_PIPELINE_EVENT}" == "push" && "${CI_COMMIT_BRANCH}" == "main" ]]; then
           ./pipeline.sh push
         else
-          ./pipeline.sh
+          ./pipeline.sh push-rc
         fi

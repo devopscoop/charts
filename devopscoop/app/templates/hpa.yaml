@@ -8,7 +8,11 @@ metadata:
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
+    {{- if eq .Values.workloadType "StatefulSet" }}
+    kind: StatefulSet
+    {{- else }}
     kind: Deployment
+    {{- end }}
     name: {{ include "app.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}

@@ -60,3 +60,13 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Validate workloadType value
+*/}}
+{{- define "app.validateWorkloadType" -}}
+{{- $valid := list "Deployment" "StatefulSet" -}}
+{{- if not (has .Values.workloadType $valid) -}}
+{{- fail (printf "Invalid workloadType %q. Must be one of: %s" .Values.workloadType (join ", " $valid)) -}}
+{{- end -}}
+{{- end -}}

@@ -18,6 +18,7 @@ jobs:
           echo "helm_username=${{ github.actor }}" >> $GITHUB_ENV
           echo "helm_password=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
           echo "git_repo_owner=$GITHUB_REPOSITORY_OWNER" >> $GITHUB_ENV
-      - run: ./pipeline.sh
+      - if: github.event_name == 'pull_request'
+        run: ./pipeline.sh push-rc
       - if: github.event_name == 'push'
         run: ./pipeline.sh push

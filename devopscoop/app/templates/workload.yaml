@@ -1,5 +1,10 @@
+{{- include "app.validateWorkloadType" . -}}
 apiVersion: apps/v1
+{{- if eq .Values.workloadType "StatefulSet" }}
+kind: StatefulSet
+{{- else }}
 kind: Deployment
+{{- end }}
 metadata:
   name: {{ include "app.fullname" . }}
   labels:
@@ -11,6 +16,16 @@ spec:
   selector:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
+  {{- if eq .Values.workloadType "StatefulSet" }}
+  serviceName: {{ ((.Values.statefulSet).serviceName) | default (printf "%s-headless" (include "app.fullname" .)) }}
+  {{- with (.Values.statefulSet).podManagementPolicy }}
+  podManagementPolicy: {{ . }}
+  {{- end }}
+  {{- with (.Values.statefulSet).updateStrategy }}
+  updateStrategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
   template:
     metadata:
       annotations:
@@ -137,3 +152,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  {{- if and (eq .Values.workloadType "StatefulSet") ((.Values.statefulSet).volumeClaimTemplates) }}
+  volumeClaimTemplates:
+    {{- toYaml .Values.statefulSet.volumeClaimTemplates | nindent 4 }}
+  {{- end }}
