@@ -30,6 +30,13 @@ workloadType: "Deployment"
 #         requests:
 #           storage: 1Gi
 
+# Deployment update strategy. Only used when workloadType is "Deployment".
+# Use "Recreate" to guarantee old pods are fully terminated before new ones
+# start (e.g. for singleton workloads that must never run two instances at once).
+# See: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+# strategy:
+#   type: Recreate
+
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1
 

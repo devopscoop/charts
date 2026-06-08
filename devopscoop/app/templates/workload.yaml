@@ -25,6 +25,11 @@ spec:
   updateStrategy:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- else }}
+  {{- with .Values.strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- end }}
   template:
     metadata:
