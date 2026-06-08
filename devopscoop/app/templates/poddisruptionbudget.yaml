@@ -1,7 +1,7 @@
 # https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 # Copied the service.yaml default template, then used some patterns found in https://github.com/kubernetes/dashboard/blob/4940626339ee16a5261acc28ad814190636b3ba9/charts/kubernetes-dashboard/templates/security/pdb.yaml
 
-{{- if .Values.podDisruptionBudget.enabled }}
+{{- if and .Values.podDisruptionBudget.enabled (gt (int .Values.replicaCount) 1) }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
