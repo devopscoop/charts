@@ -32,9 +32,33 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 
 - The `arguments/*.argdown` files are [Argdown](https://argdown.org/) argument maps capturing the reasoning behind contested design decisions (e.g. `envFrom` vs `env`, one Helm release per Deployment). Read them before reopening a settled debate, and add a new map when making a similarly contested call.
 
+**Conventional commits:**
+
+- All commits and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.). Enforced on PRs by `amannn/action-semantic-pull-request` in `.github/workflows/lint-pr.yaml`.
+
+**Release automation (`release-please`):**
+
+- `release-please-config.json` + `.release-please-manifest.json` drive release-please on all three CI platforms:
+  - **GitHub Actions** (`.github/workflows/release-please.yaml`): `googleapis/release-please-action` creates a release PR, then a GitHub Release + tag on merge.
+  - **GitLab CI** (`.gitlab-ci.yml`): `release-please release-pr` creates a merge request via the GitLab API (experimental — verify after first push).
+  - **Woodpecker CI** (`.woodpecker/helm.yaml`): `release-please release-pr` creates a PR via the Gitea API on Codeberg (experimental — verify after first push).
+- On every push to main, release-please maintains a release PR/MR that bumps `version` in `Chart.yaml`, updates `CHANGELOG.md`, and groups changes by type. When the release PR/MR is merged, it creates the corresponding platform release (GitHub Release, GitLab Release, Codeberg Release) and tag.
+- **Do NOT bump `version` in `Chart.yaml` by hand** — release-please manages it based on conventional commit history.
+
+**Community files:**
+
+- `CODE_OF_CONDUCT.md` — Contributor Covenant v2.1.
+- `SECURITY.md` — instructions for reporting vulnerabilities privately.
+- `.github/ISSUE_TEMPLATE/` — bug report and feature request templates (GitHub).
+- `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist (GitHub).
+- `.gitlab/issue_templates/` — bug and feature templates (GitLab).
+- `.gitlab/merge_request_templates/` — MR checklist (GitLab).
+- `.github/dependabot.yml` — weekly dependency bumps for GitHub Actions.
+- `.github/workflows/stale.yaml` — closes stale issues and PRs after 60 days.
+- `artifacthub-repo.yml` — ownership verification for ArtifactHUB (fill in `repositoryID` after registering).
+
 **CI / publishing pipeline (`pipeline.sh`):**
 
 - `push-rc`: packages with a calver suffix (`<version>-rc.<timestamp>`) and pushes to the OCI registry.
 - `push`: packages with the exact `version` from `Chart.yaml` and pushes. Skips if that version already exists in the registry.
 - Runs on GitHub Actions, GitLab CI, and Woodpecker CI — all call the same `pipeline.sh` script. The registries are `ghcr.io`, `registry.gitlab.com`, and `codeberg.org` respectively.
-- **Bump `version` in `Chart.yaml` for every change** — the pipeline will skip the push silently if the version already exists.

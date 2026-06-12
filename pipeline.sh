@@ -26,11 +26,11 @@ for chart in devopscoop/app; do
   fi
 
   # If chart already exists in the chart repository, don't push.
-  if helm pull "oci://${helm_registry}/${git_repo_owner}/charts/${chart_name}" --version "${chart_version}" &> /dev/null; then
+  if helm pull "oci://${helm_registry}/${git_repo_owner}/${chart_name}" --version "${chart_version}" &> /dev/null; then
     echo -e "\e[31mWARNING: Chart ${chart_name} version ${chart_version} already exists in the repository.\nThis means that the chart's code has not changed, or you forgot to update the version in Chart.yaml.\e[0m"
   else
     if [[ $arg == 'push' || $arg == 'push-rc' ]]; then
-      helm push "${chart_name}-${chart_version}.tgz" "oci://${helm_registry}/${git_repo_owner}/charts"
+      helm push "${chart_name}-${chart_version}.tgz" "oci://${helm_registry}/${git_repo_owner}"
     fi
   fi
 done

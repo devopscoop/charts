@@ -1,4 +1,28 @@
 steps:
+  release-please:
+    when:
+      - event: push
+        branch: main
+    image: node:20-alpine
+    environment:
+      # To create RELEASE_PLEASE_TOKEN:
+      # 1. Go to https://codeberg.org/user/settings/applications.
+      # 2. Create a token with these settings:
+      #   - Token name: devopscoop/charts/.woodpecker/helm.yaml (release-please)
+      #   - Set full API access.
+      # 3. Click "Generate token".
+      # 4. Copy the token.
+      # 5. Log into https://ci.codeberg.org.
+      # 6. Find your repo, and add a secret with these settings:
+      #   - Name: RELEASE_PLEASE_TOKEN
+      #   - Value: <the token you copied earlier>
+      # 7. Click "Add secret".
+      RELEASE_PLEASE_TOKEN:
+        from_secret: RELEASE_PLEASE_TOKEN
+    commands:
+      - npm install -g release-please
+      - release-please release-pr --repo-url="https://codeberg.org/${CI_REPO_OWNER}/${CI_REPO_NAME}" --token="${RELEASE_PLEASE_TOKEN}"
+
   helm:
     when:
       - event: pull_request
@@ -34,3 +58,19 @@ steps:
         else
           ./pipeline.sh push-rc
         fi
+
+  release:
+    when:
+      - event: tag
+        tag: app/v*
+    image: alpine/curl:latest
+    environment:
+      RELEASE_PLEASE_TOKEN:
+        from_secret: RELEASE_PLEASE_TOKEN
+    commands:
+      - |
+        curl -s -X POST \
+          -H "Authorization: token ${RELEASE_PLEASE_TOKEN}" \
+          -H "Content-Type: application/json" \
+          -d "{\"tag_name\":\"${CI_COMMIT_TAG}\",\"name\":\"Release ${CI_COMMIT_TAG}\",\"body\":\"See [CHANGELOG](https://codeberg.org/${CI_REPO_OWNER}/${CI_REPO_NAME}/src/branch/main/devopscoop/app/CHANGELOG.md)\"}" \
+          "https://codeberg.org/api/v1/repos/${CI_REPO_OWNER}/${CI_REPO_NAME}/releases"

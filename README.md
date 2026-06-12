@@ -1,57 +1,64 @@
-# charts
+# Helm Charts
 
-## Overview
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Helm](https://img.shields.io/badge/helm-3.x-0F1689?logo=helm&labelColor=0F1689&color=gray)](https://helm.sh/)
+[![release-please](https://img.shields.io/badge/release--please-blue?logo=google)](https://github.com/googleapis/release-please)
 
-This repo contains a reusable, generic `app` chart. The `helm create` command generates boilerplate for a basic chart. This `app` chart just extends that basic chart. You can see the differences between this `app` chart and the default Helm chart like this (note that the pipe character "|" in the middle indicates a difference, while "<" and ">" indicate new or deleted lines):
+Reusable Helm charts published to GitHub Container Registry, GitLab Container
+Registry, and Codeberg Container Registry.
 
+## Charts
+
+### [app](devopscoop/app/)
+
+A generic application chart that extends the default `helm create` boilerplate.
+Use it to deploy web services, workers, and stateful workloads on Kubernetes.
+
+**Features**
+
+- `Deployment` or `StatefulSet` via `workloadType`
+- Init containers, custom command/args
+- Multiple env-var injection patterns (`envConfigMap`, `envSecret`, `env`, `secrets`)
+- Ingress + Gateway API HTTPRoute (independent toggles)
+- Horizontal Pod Autoscaler
+- PodDisruptionBudget (auto-disabled when `replicaCount <= 1`)
+- ServiceAccount, volumes, probes, affinity, tolerations
+- Rolling checksum annotations on config changes
+
+Full documentation in [`devopscoop/app/values.yaml`](devopscoop/app/values.yaml).
+Design rationales in [`arguments/`](arguments/).
+
+## Quick start
+
+```sh
+helm install my-app oci://ghcr.io/devopscoop/app --version 0.11.0
 ```
-cd /tmp
-helm create app
-cd -
-diff -r -y -w -W 240 --color=always /tmp/app devopscoop/app/ | less -R
-```
 
-## Features
+See [Usage](#usage) for more deployment options.
 
-- Adds [`command` and `args`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
-- Adds [`initContainers`](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-- Adds [`startupProbe`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
-- Adds the ability to put environment variables in a [ConfigMap](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/) or [Secret](https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/#configure-all-key-value-pairs-in-a-secret-as-container-environment-variables).
-- Ingress is compatible with older Kubernetes clusters.
-- Service can be disabled if it's not needed.
-
-See the `values.yaml` file for examples of how to use these features.
-
-## How to use this chart
-
-This chart is published to these repos:
-
-- oci://codeberg.org/devopscoop/charts/app
-- oci://registry.gitlab.com/devopscoop/charts/app
-- oci://ghcr.io/devopscoop/charts/app
+## Usage
 
 ### FluxCD
 
 ```yaml
----
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: devopscoop
 spec:
   interval: 60m
-  url: oci://codeberg.org/devopscoop/charts
+  url: oci://ghcr.io/devopscoop
   type: oci
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: your-app-name
+  name: my-app
 spec:
   chart:
     spec:
       chart: app
-      version: 0.8.2
+      version: 0.11.0
       sourceRef:
         kind: HelmRepository
         name: devopscoop
@@ -61,13 +68,55 @@ spec:
 
 ```yaml
 releases:
-  - name: your-app-name
-    chart: oci://codeberg.org/devopscoop/charts/app
-    version: 0.8.2
+  - name: my-app
+    chart: oci://ghcr.io/devopscoop/app
+    version: 0.11.0
 ```
 
 ### Helm CLI
 
 ```sh
-helm install your-app-name oci://codeberg.org/devopscoop/charts/app --version 0.8.2
+# Latest
+helm install my-app oci://ghcr.io/devopscoop/app
+
+# Specific version
+helm install my-app oci://ghcr.io/devopscoop/app --version 0.11.0
 ```
+
+### Registries
+
+Charts are published to all three registries on every release.
+Replace the registry URL to match your preferred platform:
+
+| Platform | Registry |
+|----------|----------|
+| GitHub   | `oci://ghcr.io/devopscoop/app` |
+| GitLab   | `oci://registry.gitlab.com/devopscoop/app` |
+| Codeberg | `oci://codeberg.org/devopscoop/app` |
+
+## Local development
+
+```sh
+# Lint
+helm lint devopscoop/app
+
+# Render all templates with test values
+helm template devopscoop/app -f devopscoop/app/test.values.yaml
+
+# Diff against a stock helm create
+cd /tmp && helm create _app && cd - && diff -r -y -W 240 /tmp/_app devopscoop/app/
+```
+
+For more detail, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
+
+- All PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/).
+- Versioning is automated by [release-please](https://github.com/googleapis/release-please).
+- **Do not bump `version` in `Chart.yaml` by hand.**
+
+## License
+
+[MIT](LICENSE)
