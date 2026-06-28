@@ -49,9 +49,7 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 
 - `CODE_OF_CONDUCT.md` — Contributor Covenant v2.1.
 - `SECURITY.md` — instructions for reporting vulnerabilities privately.
-- `.github/ISSUE_TEMPLATE/` — bug report and feature request templates (GitHub).
 - `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist (GitHub).
-- `.gitlab/issue_templates/` — bug and feature templates (GitLab).
 - `.gitlab/merge_request_templates/` — MR checklist (GitLab).
 - `.github/dependabot.yml` — weekly dependency bumps for GitHub Actions.
 - `.github/workflows/stale.yaml` — closes stale issues and PRs after 60 days.
