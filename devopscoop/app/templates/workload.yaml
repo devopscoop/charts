@@ -17,7 +17,7 @@ spec:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
   {{- if eq .Values.workloadType "StatefulSet" }}
-  serviceName: {{ ((.Values.statefulSet).serviceName) | default (printf "%s-headless" (include "app.fullname" .)) }}
+  serviceName: {{ include "app.headlessServiceName" . }}
   {{- with (.Values.statefulSet).podManagementPolicy }}
   podManagementPolicy: {{ . }}
   {{- end }}
