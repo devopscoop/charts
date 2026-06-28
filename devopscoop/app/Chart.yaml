@@ -37,6 +37,3 @@ annotations:
       url: https://gitlab.com/devopscoop/charts
     - name: Source (Codeberg)
       url: https://codeberg.org/devopscoop/charts
-  artifacthub.io/maintainers: |
-    - name: devopscoop
-      email: maintainers@devops.coop
