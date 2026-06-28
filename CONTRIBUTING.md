@@ -90,7 +90,6 @@ Push your branch and open a pull request against the `main` branch.
 
 The CI will:
 
-1. **Check your PR title** follows conventional commits (`.github/workflows/lint-pr.yaml`).
 1. **Lint and template-render** the chart (`.github/workflows/helm.yaml` on PR).
 1. **Publish an RC** (`<chart-version>-rc.<timestamp>`) to the OCI registries for
    testing (`.github/workflows/helm.yaml` on PR, GitLab CI MR, Woodpecker CI PR).

@@ -34,7 +34,7 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 
 **Conventional commits:**
 
-- All commits and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.). Enforced on PRs by `amannn/action-semantic-pull-request` in `.github/workflows/lint-pr.yaml`.
+- All commits and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.). This is not CI-enforced — release-please depends on the format to bump the version and build the changelog, so keep commits conventional.
 
 **Release automation (`release-please`):**
 
@@ -51,8 +51,6 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 - `SECURITY.md` — instructions for reporting vulnerabilities privately.
 - `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist (GitHub).
 - `.gitlab/merge_request_templates/` — MR checklist (GitLab).
-- `.github/dependabot.yml` — weekly dependency bumps for GitHub Actions.
-- `.github/workflows/stale.yaml` — closes stale issues and PRs after 60 days.
 - `artifacthub-repo.yml` — ownership verification for ArtifactHUB (fill in `repositoryID` after registering).
 
 **CI / publishing pipeline (`pipeline.sh`):**
