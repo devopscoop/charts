@@ -47,7 +47,6 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 
 **Community files:**
 
-- `CODE_OF_CONDUCT.md` — Contributor Covenant v2.1.
 - `SECURITY.md` — instructions for reporting vulnerabilities privately.
 - `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist (GitHub).
 - `.gitlab/merge_request_templates/` — MR checklist (GitLab).
