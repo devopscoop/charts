@@ -46,7 +46,7 @@ helm:
     - export helm_registry="registry.gitlab.com"
     - export helm_username="$CI_REGISTRY_USER"
     - export helm_password="$CI_REGISTRY_PASSWORD"
-    - export git_repo_owner="$CI_PROJECT_NAMESPACE"
+    - export registry_namespace="$CI_PROJECT_PATH"
     - |
       if [ -n "$CI_MERGE_REQUEST_ID" ]; then
         ./pipeline.sh push-rc

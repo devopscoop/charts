@@ -50,7 +50,7 @@ steps:
       helm_password:
         from_secret: helm_password
 
-      git_repo_owner: ${CI_REPO_OWNER}
+      registry_namespace: ${CI_REPO}
     commands:
       - |
         if [[ "${CI_PIPELINE_EVENT}" == "push" && "${CI_COMMIT_BRANCH}" == "main" ]]; then

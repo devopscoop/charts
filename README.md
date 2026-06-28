@@ -31,7 +31,7 @@ Design rationales in [`arguments/`](arguments/).
 ## Quick start
 
 ```sh
-helm install my-app oci://ghcr.io/devopscoop/app --version 0.11.0
+helm install my-app oci://ghcr.io/devopscoop/charts/app --version 0.11.0
 ```
 
 See [Usage](#usage) for more deployment options.
@@ -47,7 +47,7 @@ metadata:
   name: devopscoop
 spec:
   interval: 60m
-  url: oci://ghcr.io/devopscoop
+  url: oci://ghcr.io/devopscoop/charts
   type: oci
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -69,7 +69,7 @@ spec:
 ```yaml
 releases:
   - name: my-app
-    chart: oci://ghcr.io/devopscoop/app
+    chart: oci://ghcr.io/devopscoop/charts/app
     version: 0.11.0
 ```
 
@@ -77,10 +77,10 @@ releases:
 
 ```sh
 # Latest
-helm install my-app oci://ghcr.io/devopscoop/app
+helm install my-app oci://ghcr.io/devopscoop/charts/app
 
 # Specific version
-helm install my-app oci://ghcr.io/devopscoop/app --version 0.11.0
+helm install my-app oci://ghcr.io/devopscoop/charts/app --version 0.11.0
 ```
 
 ### Registries
@@ -90,9 +90,9 @@ Replace the registry URL to match your preferred platform:
 
 | Platform | Registry |
 |----------|----------|
-| GitHub   | `oci://ghcr.io/devopscoop/app` |
-| GitLab   | `oci://registry.gitlab.com/devopscoop/app` |
-| Codeberg | `oci://codeberg.org/devopscoop/app` |
+| GitHub   | `oci://ghcr.io/devopscoop/charts/app` |
+| GitLab   | `oci://registry.gitlab.com/devopscoop/charts/app` |
+| Codeberg | `oci://codeberg.org/devopscoop/charts/app` |
 
 ## Local development
 
