@@ -1,27 +1,5 @@
 stages:
-  - release-pr
   - publish
-  - release
-
-release-please:
-  stage: release-pr
-  image: node:20-alpine
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-      when: always
-    - when: never
-  variables:
-    # Token instructions:
-    # 1. Go to https://gitlab.com/-/user_settings/personal_access_tokens
-    # 2. Create a token with "api" scope.
-    # 3. Add it as a CI variable named RELEASE_PLEASE_TOKEN in
-    #    Settings > CI/CD > Variables.
-    # 4. NOTE: release-please GitLab support is experimental. If the MR is not
-    #    created automatically, verify the token works with:
-    #    curl -H "PRIVATE-TOKEN: $RELEASE_PLEASE_TOKEN" https://gitlab.com/api/v4/projects/$CI_PROJECT_ID
-  script:
-    - npm install -g release-please
-    - release-please release-pr --repo-url="https://gitlab.com/${CI_PROJECT_PATH}" --token="${RELEASE_PLEASE_TOKEN}"
 
 helm:
   stage: publish
@@ -53,17 +31,3 @@ helm:
       else
         ./pipeline.sh push
       fi
-
-release:
-  stage: release
-  image: alpine/helm:4.1.1
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^app\/v/'
-      when: always
-    - when: never
-  script:
-    - echo "Release $CI_COMMIT_TAG"
-  release:
-    name: 'Release $CI_COMMIT_TAG'
-    description: 'See [CHANGELOG](/-/blob/main/devopscoop/app/CHANGELOG.md) for details.'
-    tag_name: '$CI_COMMIT_TAG'

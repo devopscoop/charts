@@ -32,18 +32,9 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 
 - The `arguments/*.argdown` files are [Argdown](https://argdown.org/) argument maps capturing the reasoning behind contested design decisions (e.g. `envFrom` vs `env`, one Helm release per Deployment). Read them before reopening a settled debate, and add a new map when making a similarly contested call.
 
-**Conventional commits:**
+**Versioning:**
 
-- All commits and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.). This is not CI-enforced — release-please depends on the format to bump the version and build the changelog, so keep commits conventional.
-
-**Release automation (`release-please`):**
-
-- `release-please-config.json` + `.release-please-manifest.json` drive release-please on all three CI platforms:
-  - **GitHub Actions** (`.github/workflows/release-please.yaml`): `googleapis/release-please-action` creates a release PR, then a GitHub Release + tag on merge.
-  - **GitLab CI** (`.gitlab-ci.yml`): `release-please release-pr` creates a merge request via the GitLab API (experimental — verify after first push).
-  - **Woodpecker CI** (`.woodpecker/helm.yaml`): `release-please release-pr` creates a PR via the Gitea API on Codeberg (experimental — verify after first push).
-- On every push to main, release-please maintains a release PR/MR that bumps `version` in `Chart.yaml`, updates `CHANGELOG.md`, and groups changes by type. When the release PR/MR is merged, it creates the corresponding platform release (GitHub Release, GitLab Release, Codeberg Release) and tag.
-- **Do NOT bump `version` in `Chart.yaml` by hand** — release-please manages it based on conventional commit history.
+- `version` in `devopscoop/app/Chart.yaml` is bumped by hand ([SemVer](https://semver.org/)) when a change should be released. The publish pipeline skips pushing when that version already exists in the registry.
 
 **Community files:**
 

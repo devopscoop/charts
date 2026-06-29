@@ -2,7 +2,6 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Helm](https://img.shields.io/badge/helm-3.x-0F1689?logo=helm&labelColor=0F1689&color=gray)](https://helm.sh/)
-[![release-please](https://img.shields.io/badge/release--please-blue?logo=google)](https://github.com/googleapis/release-please)
 
 Reusable Helm charts published to GitHub Container Registry, GitLab Container
 Registry, and Codeberg Container Registry.
@@ -94,28 +93,12 @@ Replace the registry URL to match your preferred platform:
 | GitLab   | `oci://registry.gitlab.com/devopscoop/charts/app` |
 | Codeberg | `oci://codeberg.org/devopscoop/charts/app` |
 
-## Local development
-
-```sh
-# Lint
-helm lint devopscoop/app
-
-# Render all templates with test values
-helm template devopscoop/app -f devopscoop/app/test.values.yaml
-
-# Diff against a stock helm create
-cd /tmp && helm create _app && cd - && diff -r -y -W 240 /tmp/_app devopscoop/app/
-```
-
-For more detail, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
 ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
-- All PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/).
-- Versioning is automated by [release-please](https://github.com/googleapis/release-please).
-- **Do not bump `version` in `Chart.yaml` by hand.**
+- Bump `version` in `devopscoop/app/Chart.yaml` ([SemVer](https://semver.org/))
+  when a change should be released.
 
 ## License
 

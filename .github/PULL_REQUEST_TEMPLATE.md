@@ -3,7 +3,7 @@ What does this PR change? Why is it needed?
 
 **Checklist**
 
-- [ ] Chart version is **not** bumped — release-please handles it.
+- [ ] `version` in `devopscoop/app/Chart.yaml` is bumped if this should be released.
 - [ ] `helm lint devopscoop/app` passes.
 - [ ] `helm template devopscoop/app -f devopscoop/app/test.values.yaml` produces
   expected output.
