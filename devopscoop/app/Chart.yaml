@@ -19,21 +19,4 @@ appVersion: "1.16.0"
 kubeVersion: ">=1.19.0"
 maintainers:
   - name: devopscoop
-    email: maintainers@devops.coop
     url: https://devops.coop
-annotations:
-  artifacthub.io/category: integration-delivery
-  artifacthub.io/license: MIT
-  artifacthub.io/operator: "false"
-  artifacthub.io/prerelease: "false"
-  artifacthub.io/recommended: "true"
-  artifacthub.io/signKey: |
-    fingerprint: ""
-    url: ""
-  artifacthub.io/links: |
-    - name: Source (GitHub)
-      url: https://github.com/devopscoop/charts
-    - name: Source (GitLab)
-      url: https://gitlab.com/devopscoop/charts
-    - name: Source (Codeberg)
-      url: https://codeberg.org/devopscoop/charts
