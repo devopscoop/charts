@@ -26,7 +26,7 @@ Design rationales in [`arguments/`](arguments/).
 ## Quick start
 
 ```sh
-helm install my-app oci://registry.gitlab.com/devopscoop/charts/app --version 0.11.0
+helm install my-app oci://registry.gitlab.com/devopscoop/charts/app --version 0.11.1
 ```
 
 See [Usage](#usage) for more deployment options.
@@ -53,7 +53,7 @@ spec:
   chart:
     spec:
       chart: app
-      version: 0.11.0
+      version: 0.11.1
       sourceRef:
         kind: HelmRepository
         name: devopscoop
@@ -65,7 +65,7 @@ spec:
 releases:
   - name: my-app
     chart: oci://registry.gitlab.com/devopscoop/charts/app
-    version: 0.11.0
+    version: 0.11.1
 ```
 
 ### Helm CLI
@@ -75,7 +75,7 @@ releases:
 helm install my-app oci://registry.gitlab.com/devopscoop/charts/app
 
 # Specific version
-helm install my-app oci://registry.gitlab.com/devopscoop/charts/app --version 0.11.0
+helm install my-app oci://registry.gitlab.com/devopscoop/charts/app --version 0.11.1
 ```
 
 ### Registries
