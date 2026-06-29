@@ -38,7 +38,6 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 
 **Community files:**
 
-- `SECURITY.md` — instructions for reporting vulnerabilities privately.
 - `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist (GitHub).
 - `.gitlab/merge_request_templates/` — MR checklist (GitLab).
 - `artifacthub-repo.yml` — ownership verification for ArtifactHUB (fill in `repositoryID` after registering).

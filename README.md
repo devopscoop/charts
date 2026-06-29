@@ -1,10 +1,6 @@
 # Helm Charts
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Helm](https://img.shields.io/badge/helm-3.x-0F1689?logo=helm&labelColor=0F1689&color=gray)](https://helm.sh/)
-
-Reusable Helm charts published to GitHub Container Registry, GitLab Container
-Registry, and Codeberg Container Registry.
+Reusable Helm charts.
 
 ## Charts
 
@@ -30,7 +26,7 @@ Design rationales in [`arguments/`](arguments/).
 ## Quick start
 
 ```sh
-helm install my-app oci://ghcr.io/devopscoop/charts/app --version 0.11.0
+helm install my-app oci://registry.gitlab.com/devopscoop/charts/app --version 0.11.0
 ```
 
 See [Usage](#usage) for more deployment options.
@@ -46,7 +42,7 @@ metadata:
   name: devopscoop
 spec:
   interval: 60m
-  url: oci://ghcr.io/devopscoop/charts
+  url: oci://registry.gitlab.com/devopscoop/charts
   type: oci
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -68,7 +64,7 @@ spec:
 ```yaml
 releases:
   - name: my-app
-    chart: oci://ghcr.io/devopscoop/charts/app
+    chart: oci://registry.gitlab.com/devopscoop/charts/app
     version: 0.11.0
 ```
 
@@ -76,10 +72,10 @@ releases:
 
 ```sh
 # Latest
-helm install my-app oci://ghcr.io/devopscoop/charts/app
+helm install my-app oci://registry.gitlab.com/devopscoop/charts/app
 
 # Specific version
-helm install my-app oci://ghcr.io/devopscoop/charts/app --version 0.11.0
+helm install my-app oci://registry.gitlab.com/devopscoop/charts/app --version 0.11.0
 ```
 
 ### Registries
