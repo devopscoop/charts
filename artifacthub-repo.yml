@@ -1,0 +1,10 @@
+# ArtifactHUB repository metadata
+#
+# After registering this repo on https://artifacthub.io, ArtifactHUB will
+# provide a repositoryID to insert below. The owners list here must match
+# the owners registered on ArtifactHUB for ownership verification.
+---
+repositoryID: "9b5b948d-91e0-410e-97c1-9b3bba428918"
+owners:
+  - name: devopscoop
+    email: artifacthub.io-admins@devops.coop

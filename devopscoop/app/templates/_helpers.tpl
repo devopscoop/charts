@@ -19,6 +19,15 @@ Defaults to the release name (no chart-name suffix). Set fullnameOverride to ove
 {{- end }}
 
 {{/*
+Name of the headless Service that governs the StatefulSet.
+Defaults to "<fullname>-headless". Overridable via statefulSet.serviceName so
+the StatefulSet's serviceName and the Service it creates always agree.
+*/}}
+{{- define "app.headlessServiceName" -}}
+{{- (.Values.statefulSet).serviceName | default (printf "%s-headless" (include "app.fullname" .)) -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "app.chart" -}}

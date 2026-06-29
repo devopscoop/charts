@@ -1,11 +1,11 @@
-# Maybe we should aspire to use this pipeline?
-# https://gitlab.com/gitlab-org/charts/gitlab-runner/-/blob/main/.gitlab-ci.yml?ref_type=heads
-
-image:
-  name: alpine/helm:4.1.1
-  entrypoint: ["/bin/sh", "-c"]
+stages:
+  - publish
 
 helm:
+  stage: publish
+  image:
+    name: alpine/helm:4.1.1
+    entrypoint: ["/bin/sh", "-c"]
   rules:
     - if: '$CI_MERGE_REQUEST_ID'
       changes:
@@ -24,7 +24,7 @@ helm:
     - export helm_registry="registry.gitlab.com"
     - export helm_username="$CI_REGISTRY_USER"
     - export helm_password="$CI_REGISTRY_PASSWORD"
-    - export git_repo_owner="$CI_PROJECT_NAMESPACE"
+    - export registry_namespace="$CI_PROJECT_PATH"
     - |
       if [ -n "$CI_MERGE_REQUEST_ID" ]; then
         ./pipeline.sh push-rc

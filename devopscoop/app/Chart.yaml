@@ -1,6 +1,8 @@
 apiVersion: v2
 name: app
-description: A Helm chart for Kubernetes
+description: A generic, reusable application chart for Kubernetes — extends the default helm create with StatefulSet, Gateway API, multiple env injection patterns, and more.
+home: https://gitlab.com/devopscoop/charts
+icon: https://gitlab.com/devopscoop/charts/-/raw/main/devopscoop/app/icon.png
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -22,3 +24,6 @@ version: 0.11.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.16.0"
+maintainers:
+  - name: devopscoop
+    url: https://devops.coop

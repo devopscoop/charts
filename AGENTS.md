@@ -32,9 +32,18 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 
 - The `arguments/*.argdown` files are [Argdown](https://argdown.org/) argument maps capturing the reasoning behind contested design decisions (e.g. `envFrom` vs `env`, one Helm release per Deployment). Read them before reopening a settled debate, and add a new map when making a similarly contested call.
 
+**Versioning:**
+
+- `version` in `devopscoop/app/Chart.yaml` is bumped by hand ([SemVer](https://semver.org/)) when a change should be released. The publish pipeline skips pushing when that version already exists in the registry.
+
+**Community files:**
+
+- `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist (GitHub).
+- `.gitlab/merge_request_templates/` — MR checklist (GitLab).
+- `artifacthub-repo.yml` — ownership verification for ArtifactHUB (fill in `repositoryID` after registering).
+
 **CI / publishing pipeline (`pipeline.sh`):**
 
 - `push-rc`: packages with a calver suffix (`<version>-rc.<timestamp>`) and pushes to the OCI registry.
 - `push`: packages with the exact `version` from `Chart.yaml` and pushes. Skips if that version already exists in the registry.
 - Runs on GitHub Actions, GitLab CI, and Woodpecker CI — all call the same `pipeline.sh` script. The registries are `ghcr.io`, `registry.gitlab.com`, and `codeberg.org` respectively.
-- **Bump `version` in `Chart.yaml` for every change** — the pipeline will skip the push silently if the version already exists.
