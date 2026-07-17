@@ -1,0 +1,16 @@
+# Arch Linux package list for charts — the pacman/AUR equivalent of the
+# Brewfile. Installs every CLI tool used or referenced by this repo.
+#
+# All packages are in the official repos, so plain pacman works (as do yay/paru):
+#
+# Usage:
+#   grep -vE '^(#|$)' pkglist.txt | sudo pacman -S --needed -
+
+# bash — pipeline.sh uses `#!/usr/bin/env bash`
+bash
+
+# git — cloning and the contribution workflow
+git
+
+# helm — linting, templating, packaging, and installing the charts
+helm
