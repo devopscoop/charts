@@ -47,3 +47,13 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 - `push-rc`: packages with a calver suffix (`<version>-rc.<timestamp>`) and pushes to the OCI registry.
 - `push`: packages with the exact `version` from `Chart.yaml` and pushes. Skips if that version already exists in the registry.
 - Runs on GitHub Actions, GitLab CI, and Woodpecker CI — all call the same `pipeline.sh` script. The registries are `ghcr.io`, `registry.gitlab.com`, and `codeberg.org` respectively.
+
+## Package manifests
+
+This repo ships a `Brewfile` (macOS: `brew bundle`) and a `pkglist.txt` (Arch Linux) that install every local CLI tool the repo uses. Keep them in sync with the code:
+
+- When you add a tool, script, or a new external command inside an existing script, add the package to BOTH files, with a comment noting what uses it.
+- When a tool stops being used, remove it from both files.
+- CI-only tooling (oras self-installs inside pipeline.sh on CI runners; trivy is baked into the ghaups action image) does NOT belong in the manifests — only tools a contributor runs locally.
+- Verify package names before adding them: `brew info <formula>` for Homebrew, and the official repos/AUR for Arch. If a package is AUR-only, note that in pkglist.txt's header instructions.
+- Update the "Install required packages" section in README.md if the tool list changes.
