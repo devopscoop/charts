@@ -23,6 +23,24 @@ Use it to deploy web services, workers, and stateful workloads on Kubernetes.
 Full documentation in [`devopscoop/app/values.yaml`](devopscoop/app/values.yaml).
 Design rationales in [`arguments/`](arguments/).
 
+## Install required packages
+
+This repo ships package manifests that install every CLI tool it uses (`bash`, `git`, `helm`):
+
+- macOS, using [Homebrew](https://brew.sh/) and the `Brewfile`:
+
+  ```shell
+  brew bundle
+  ```
+
+- Arch Linux, using the `pkglist.txt` (all packages are in the official repos):
+
+  ```shell
+  grep -vE '^(#|$)' pkglist.txt | sudo pacman -S --needed -
+  ```
+
+On other operating systems, install the tools listed above manually.
+
 ## Quick start
 
 ```sh
