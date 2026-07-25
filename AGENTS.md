@@ -1,6 +1,8 @@
 # AGENTS.md
 
 This file provides guidance to AI agents when working with code in this repository.
+`CLAUDE.md` is a symlink to this file — edit `AGENTS.md`, never replace the symlink
+with a copy.
 
 ## Commands
 
@@ -8,12 +10,31 @@ This file provides guidance to AI agents when working with code in this reposito
 # Lint the chart
 helm lint devopscoop/app
 
-# Render all templates (use test.values.yaml to exercise every feature)
+# Render all templates (test.values.yaml is the de facto test suite)
 helm template devopscoop/app -f devopscoop/app/test.values.yaml
+
+# test.values.yaml pins workloadType: Deployment and replicaCount: 1, so the
+# StatefulSet, headless-Service, and PodDisruptionBudget branches never render
+# under it. Override to cover them:
+helm template devopscoop/app -f devopscoop/app/test.values.yaml \
+  --set workloadType=StatefulSet --set replicaCount=2
+
+# Render one template while iterating on it
+helm template devopscoop/app -f devopscoop/app/test.values.yaml -s templates/workload.yaml
+
+# Exercise the fail-fast validator (must abort, not render)
+helm template devopscoop/app --set workloadType=DaemonSet
 
 # Diff against a vanilla helm create output to spot unintentional drift
 cd /tmp && helm create app && cd - && diff -r -y -w -W 240 --color=always /tmp/app devopscoop/app/ | less -R
+
+# Smoke-test an installed release (templates/tests/test-connection.yaml; needs a cluster)
+helm test <release-name>
 ```
+
+There is no unit-test framework — `helm lint` plus rendering `test.values.yaml`
+is the whole local test loop. When you add a value, add it to
+`devopscoop/app/test.values.yaml` too, or nothing will ever render that branch.
 
 ## Architecture
 
@@ -22,11 +43,12 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 **Key design decisions:**
 
 - `workload.yaml` renders either a `Deployment` or `StatefulSet` based on `workloadType`. A `_helpers.tpl` validator fails fast on invalid values.
-- Environment variables have a preference order: `envConfigMap`/`envSecret` auto-create a ConfigMap/Secret and wire `envFrom`; `envConfigMapName`/`envSecretName` reference externally-managed ones; `env` maps directly to the container spec. `secrets` (deprecated) creates a Secret and injects each key via `valueFrom.secretKeyRef`. When `envConfigMap` or `envSecret` is set, a checksum annotation is added to the workload so pods roll automatically on config changes.
+- Environment variables have four independent injection paths, all of which may be active at once: `envConfigMap`/`envSecret` auto-create a ConfigMap/Secret named `<fullname>-env` and wire `envFrom`; `envConfigMapName`/`envSecretName` reference externally-managed ones; `env` maps directly to the container spec. `secrets` (deprecated) creates a Secret and injects each key via `valueFrom.secretKeyRef`. Precedence follows Kubernetes, and `workload.yaml` emits the `envFrom` entries in the order that makes it work: external refs first, chart-managed `-env` refs last (later `envFrom` wins), and `env`/`secrets` entries beat everything in `envFrom`. When `envConfigMap`, `envSecret`, or `secrets` is set, a checksum annotation is added to the workload so pods roll automatically on config changes.
 - `poddisruptionbudget.yaml` only renders when `podDisruptionBudget.enabled` is true **and** `replicaCount > 1` — a single-replica PDB would block voluntary disruptions entirely.
 - The headless Service (`headless-service.yaml`) is auto-created for StatefulSets with a default name of `<fullname>-headless`, overridable via `statefulSet.serviceName`.
 - Ingress (`ingress.yaml`, `ingress.enabled`) and Gateway API (`httproute.yaml`, `httpRoute.enabled`) are independent toggles — pick one depending on the cluster. The Ingress template stays compatible with pre-1.18 clusters by setting the legacy `kubernetes.io/ingress.class` annotation when `ingress.className` is given.
 - `app.fullname` defaults to the bare release name (no chart-name suffix), overridable via `fullnameOverride`. Resource-type suffixes like `-headless` and `-env` are layered on top of it.
+- `service.enabled: false` drops the container's `ports:` block along with the Service — the container port is not configured independently. `service.port` is also what the helm test pod wgets, so it has to stay in sync with what the app actually listens on.
 
 **Design rationale (`arguments/`):**
 
@@ -44,9 +66,12 @@ This repo contains a single Helm chart at `devopscoop/app/` — a generic, reusa
 
 **CI / publishing pipeline (`pipeline.sh`):**
 
-- `push-rc`: packages with a calver suffix (`<version>-rc.<timestamp>`) and pushes to the OCI registry.
-- `push`: packages with the exact `version` from `Chart.yaml` and pushes. Skips if that version already exists in the registry.
-- Runs on GitHub Actions, GitLab CI, and Woodpecker CI — all call the same `pipeline.sh` script. The registries are `ghcr.io`, `registry.gitlab.com`, and `codeberg.org` respectively.
+- `push-rc`: packages with a calver suffix (`<version>-rc.<timestamp>`) and pushes to the OCI registry. Runs on pull/merge requests.
+- `push`: packages with the exact `version` from `Chart.yaml` and pushes. Skips if that version already exists in the registry. Runs on merges to `main`.
+- Runs on GitHub Actions, GitLab CI, and Woodpecker CI — all call the same `pipeline.sh` script. The registries are `ghcr.io`, `registry.gitlab.com`, and `codeberg.org` respectively. Each CI config's only job is to export the four env vars `pipeline.sh` reads — `helm_registry`, `helm_username`, `helm_password`, `registry_namespace` — and then call it. The script runs under `set -Eeuo pipefail`, so a missing one is a hard failure; it also logs into the registry, so don't run it locally without meaning to.
+- Both `push` modes also `oras push` `artifacthub-repo.yml` under the reserved `artifacthub.io` tag, because OCI registries have no raw-file URL for ArtifactHub to read.
+- The chart list in `pipeline.sh` is a hardcoded one-element loop (`for chart in devopscoop/app`). A second chart means editing that loop and the `helm lint` line above it.
+- `.github/workflows/claude.yml` and `claude-code-review.yml` run this repo's Claude Code automation. They pin the action to a SHA and the model/effort via `claude_args` so CI doesn't drift with CLI defaults — keep both pinned when editing.
 
 ## Package manifests
 
