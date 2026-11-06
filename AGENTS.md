@@ -79,6 +79,6 @@ This repo ships a `Brewfile` (macOS: `brew bundle`) and a `pkglist.txt` (Arch Li
 
 - When you add a tool, script, or a new external command inside an existing script, add the package to BOTH files, with a comment noting what uses it.
 - When a tool stops being used, remove it from both files.
-- CI-only tooling (oras self-installs inside pipeline.sh on CI runners; trivy is baked into the ghaups action image) does NOT belong in the manifests — only tools a contributor runs locally.
+- CI-only tooling (e.g. oras self-installs inside pipeline.sh on CI runners) does NOT belong in the manifests — only tools a contributor runs locally.
 - Verify package names before adding them: `brew info <formula>` for Homebrew, and the official repos/AUR for Arch. If a package is AUR-only, note that in pkglist.txt's header instructions.
 - Update the "Install required packages" section in README.md if the tool list changes.
