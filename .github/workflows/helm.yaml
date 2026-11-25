@@ -6,7 +6,7 @@ on:
 jobs:
   helm:
     container:
-      image: alpine/helm:4.1.1
+      image: alpine/helm:4.3.2@sha256:a3b9d617c0c30a6c488cebb429c4ba83995a26dc2184599af5fd408a361b2e67
     permissions:
       contents: read
       packages: write
